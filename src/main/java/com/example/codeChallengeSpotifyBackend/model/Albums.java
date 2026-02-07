@@ -24,6 +24,6 @@ public class Albums {
 
     private String coverPath;
 
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "album")
     private List<Tracks> tracks;
 }

@@ -1,6 +1,6 @@
 package com.example.codeChallengeSpotifyBackend.controller;
 
-import com.example.codeChallengeSpotifyBackend.model.Tracks;
+import com.example.codeChallengeSpotifyBackend.dtos.TracksDTO;
 import com.example.codeChallengeSpotifyBackend.service.TracksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +14,12 @@ public class TracksController {
     private TracksService tracksService;
 
     @PostMapping("/createTrack")
-    public ResponseEntity<Tracks> createTrack(
+    public ResponseEntity<TracksDTO> createTrack(
             @RequestParam String isrc,
             @RequestHeader("Authorization") String token
     ) {
-        Tracks result = tracksService.createTrack(isrc, token);
-        return ResponseEntity.ok(result);
+        TracksDTO trackDTO = tracksService.createTrack(isrc, token);
+        return ResponseEntity.ok(trackDTO);
     }
 
 }

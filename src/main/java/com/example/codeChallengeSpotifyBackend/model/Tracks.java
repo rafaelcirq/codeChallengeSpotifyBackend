@@ -15,18 +15,18 @@ import lombok.Setter;
 public class Tracks {
 
     @Id
-    public String isrc;
+    private String isrc;
 
-    public String name;
+    private String name;
 
-    public String artistName;
+    private String artistName;
 
-    public Boolean isExplicit;
+    private Boolean isExplicit;
 
-    public int playbackSeconds;
+    private int playbackSeconds;
 
     @ManyToOne
     @JoinColumn(name = "album_id")
-    public Albums album;
+    private Albums album;
 
 }
