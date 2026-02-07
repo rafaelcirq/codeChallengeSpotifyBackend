@@ -12,10 +12,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SpotifyInvalidTokenException.class)
     public ResponseEntity<ErrorResponse> handleSpotifyInvalidToken(
-            SpotifyInvalidTokenException ex
+            SpotifyInvalidTokenException e
     ) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(new ErrorResponse(ex.getMessage(), 401, Instant.now()));
+                .body(new ErrorResponse(e.getMessage(), 401, Instant.now()));
+    }
+
+    @ExceptionHandler(IsrcNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleIsrcNotFoundException(
+            IsrcNotFoundException e
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(e.getMessage(), 404, Instant.now()));
     }
 }
