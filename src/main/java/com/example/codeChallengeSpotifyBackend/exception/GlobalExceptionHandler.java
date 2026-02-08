@@ -1,5 +1,11 @@
 package com.example.codeChallengeSpotifyBackend.exception;
 
+import com.example.codeChallengeSpotifyBackend.exception.albums.AlbumCoverNotFoundException;
+import com.example.codeChallengeSpotifyBackend.exception.albums.AlbumNotFoundException;
+import com.example.codeChallengeSpotifyBackend.exception.albums.ImageNotSavedException;
+import com.example.codeChallengeSpotifyBackend.exception.spotify.SpotifyInvalidTokenException;
+import com.example.codeChallengeSpotifyBackend.exception.tracks.ExistingIsrcException;
+import com.example.codeChallengeSpotifyBackend.exception.tracks.IsrcNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +31,42 @@ public class GlobalExceptionHandler {
     ) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(e.getMessage(), 404, Instant.now()));
+    }
+
+    @ExceptionHandler(ExistingIsrcException.class)
+    public ResponseEntity<ErrorResponse> handleExistingIsrcException(
+            ExistingIsrcException e
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(e.getMessage(), 409, Instant.now()));
+    }
+
+    @ExceptionHandler(ImageNotSavedException.class)
+    public ResponseEntity<ErrorResponse> handleImageNotSavedException(
+            ImageNotSavedException e
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(e.getMessage(), 500, Instant.now()));
+    }
+
+    @ExceptionHandler(AlbumNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAlbumNotFoundException(
+            AlbumNotFoundException e
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(e.getMessage(), 404, Instant.now()));
+    }
+
+    @ExceptionHandler(AlbumCoverNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAlbumCoverNotFoundException(
+            AlbumCoverNotFoundException e
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(e.getMessage(), 404, Instant.now()));
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/codechallenge")
@@ -38,7 +38,7 @@ public class TracksController {
     @GetMapping("/getCover")
     public ResponseEntity<Resource> getCover(
             @RequestParam String isrc
-    ) throws MalformedURLException {
+    ) {
         Resource image = tracksService.getCover(isrc);
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)

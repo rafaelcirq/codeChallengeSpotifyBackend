@@ -1,6 +1,6 @@
 package com.example.codeChallengeSpotifyBackend.service;
 
-import com.example.codeChallengeSpotifyBackend.exception.SpotifyInvalidTokenException;
+import com.example.codeChallengeSpotifyBackend.exception.spotify.SpotifyInvalidTokenException;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -29,7 +29,7 @@ public class SpotifyClientService {
             int status = con.getResponseCode();
 
             if (status == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                throw new SpotifyInvalidTokenException("Spotify access token is invalid or expired");
+                throw new SpotifyInvalidTokenException();
             }
 
             if (status >= 400) {
