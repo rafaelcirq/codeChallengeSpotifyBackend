@@ -80,4 +80,5 @@ public class AlbumsService {
             throw new RuntimeException("Image extension could not me extracted!");
         }
     }
+
 }

@@ -14,10 +14,19 @@ public class SpotifyClientService {
     private static final String BASE_URL = "https://api.spotify.com/v1";
 
     public String searchTrackByIsrc(String isrc, String token) {
+        String urlString = BASE_URL + "/search?q=isrc:" + isrc + "&type=track";
+        return getApiResponse(isrc, token, urlString);
+    }
+
+    public String getAlbumById(String id, String token) {
+        String urlString = BASE_URL + "/albums/" + id;
+        return getApiResponse(id, token, urlString);
+    }
+
+    public String getApiResponse(String id, String token, String urlString) {
         HttpURLConnection con = null;
 
         try {
-            String urlString = BASE_URL + "/search?q=isrc:" + isrc + "&type=track";
             URL url = new URL(urlString);
 
             con = (HttpURLConnection) url.openConnection();
@@ -57,4 +66,5 @@ public class SpotifyClientService {
             }
         }
     }
+
 }

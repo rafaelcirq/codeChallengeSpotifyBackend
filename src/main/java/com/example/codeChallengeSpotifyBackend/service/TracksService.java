@@ -1,15 +1,14 @@
 package com.example.codeChallengeSpotifyBackend.service;
 
+import com.example.codeChallengeSpotifyBackend.dtos.AlbumsDTO;
 import com.example.codeChallengeSpotifyBackend.dtos.TracksDTO;
-import com.example.codeChallengeSpotifyBackend.exception.albums.AlbumCoverNotFoundException;
 import com.example.codeChallengeSpotifyBackend.exception.tracks.ExistingIsrcException;
 import com.example.codeChallengeSpotifyBackend.exception.tracks.IsrcNotFoundException;
+import com.example.codeChallengeSpotifyBackend.mapper.AlbumsMapper;
 import com.example.codeChallengeSpotifyBackend.mapper.TracksMapper;
-import com.example.codeChallengeSpotifyBackend.mapper.spotify.SpotifyTrackJsonParser;
 import com.example.codeChallengeSpotifyBackend.model.Albums;
 import com.example.codeChallengeSpotifyBackend.model.Tracks;
 import com.example.codeChallengeSpotifyBackend.repository.TracksRepository;
-import org.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
@@ -26,27 +25,27 @@ public class TracksService {
 
     private final AlbumsService albumService;
 
-    private final SpotifyTrackJsonParser spotifyTrackJsonParser;
+    private final AlbumsMapper albumsMapper;
 
-    public TracksService(SpotifyClientService spotifyClientService, TracksRepository tracksRepository, TracksMapper tracksMapper, AlbumsService albumService, SpotifyTrackJsonParser spotifyTrackJsonParser) {
+    public TracksService(SpotifyClientService spotifyClientService, TracksRepository tracksRepository, TracksMapper tracksMapper, AlbumsService albumService, AlbumsMapper albumsMapper) {
         this.spotifyClientService = spotifyClientService;
         this.tracksRepository = tracksRepository;
         this.tracksMapper = tracksMapper;
         this.albumService = albumService;
-        this.spotifyTrackJsonParser = spotifyTrackJsonParser;
+        this.albumsMapper = albumsMapper;
     }
 
     public TracksDTO createTrack(String isrc, String token) {
         if (tracksRepository.findById(isrc).isPresent())
             throw new ExistingIsrcException();
-
-        String spotifyApiResponse = spotifyClientService.searchTrackByIsrc(isrc, token);
-        JSONObject trackJson = spotifyTrackJsonParser.extractTrackJson(spotifyApiResponse);
-        TracksDTO dto = tracksMapper.fromSpotifyJson(trackJson);
-        Tracks track = tracksMapper.toEntity(dto);
+        String spotifyApiTrackResponse = spotifyClientService.searchTrackByIsrc(isrc, token);
+        TracksDTO trackDto = tracksMapper.fromSpotifyApiResponse(spotifyApiTrackResponse);
+        String spotifyApiAlbumResponse = spotifyClientService.getAlbumById(trackDto.getAlbumId(), token);
+        AlbumsDTO albumDTO = albumsMapper.fromSpotifyApiResponse(spotifyApiAlbumResponse);
+        Tracks track = tracksMapper.toEntity(trackDto);
         Albums album = albumService
-                .findById(track.getAlbum().getId())
-                .orElseGet(() -> albumService.save(track.getAlbum()));
+                .findById(albumDTO.getId())
+                .orElseGet(() -> albumService.save(albumsMapper.toEntity(albumDTO)));
         track.setAlbum(album);
         return tracksMapper.toDto(tracksRepository.save(track));
     }

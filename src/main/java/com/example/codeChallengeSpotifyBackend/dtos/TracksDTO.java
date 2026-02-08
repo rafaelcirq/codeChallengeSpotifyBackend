@@ -11,14 +11,14 @@ public class TracksDTO {
     private boolean isExplicit;
     private int playbackSeconds;
     private String isrc;
-    private AlbumsDTO album;
+    private String albumId;
 
-    public TracksDTO(String name, String artistName, boolean isExplicit, int playbackSeconds, String isrc, AlbumsDTO album) {
+    public TracksDTO(String name, String artistName, boolean isExplicit, int playbackSeconds, String isrc, String albumId) {
         this.name = name;
         this.artistName = artistName;
         this.isExplicit = isExplicit;
         this.playbackSeconds = playbackSeconds;
         this.isrc = isrc;
-        this.album = album;
+        this.albumId = albumId;
     }
 }

@@ -10,9 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class AlbumsMapper {
 
-    public AlbumsDTO fromSpotifyJson(JSONObject trackJson) {
-        JSONObject albumJson = trackJson.getJSONObject("album");
-
+    public AlbumsDTO fromSpotifyApiResponse(String apiResponse) {
+        JSONObject albumJson = new JSONObject(apiResponse);
         JSONArray images = albumJson.getJSONArray("images");
         String coverPath = images.getJSONObject(0).getString("url");
 

@@ -1,6 +1,5 @@
 package com.example.codeChallengeSpotifyBackend.mapper;
 
-import com.example.codeChallengeSpotifyBackend.dtos.AlbumsDTO;
 import com.example.codeChallengeSpotifyBackend.dtos.TracksDTO;
 import com.example.codeChallengeSpotifyBackend.model.Tracks;
 import org.json.JSONObject;
@@ -9,21 +8,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class TracksMapper {
 
-    private final AlbumsMapper albumsMapper;
-
-    public TracksMapper(AlbumsMapper albumsMapper) {
-        this.albumsMapper = albumsMapper;
-    }
-
-    public TracksDTO fromSpotifyJson(JSONObject trackJson) {
-        AlbumsDTO albumDTO = this.albumsMapper.fromSpotifyJson(trackJson);
+    public TracksDTO fromSpotifyApiResponse(String apiResponse) {
+        JSONObject trackJson = new JSONObject(apiResponse)
+                .getJSONObject("tracks")
+                .getJSONArray("items")
+                .getJSONObject(0);
 
         return new TracksDTO(
                 trackJson.getString("name"),
                 trackJson.getJSONArray("artists").getJSONObject(0).getString("name"),
                 trackJson.getBoolean("explicit"), trackJson.getInt("duration_ms") / 1000,
                 trackJson.getJSONObject("external_ids").getString("isrc"),
-                albumDTO);
+                trackJson.getJSONObject("album").getString("id"));
     }
 
     public Tracks toEntity(TracksDTO dto) {
@@ -33,7 +29,6 @@ public class TracksMapper {
         track.setIsExplicit(dto.isExplicit());
         track.setPlaybackSeconds(dto.getPlaybackSeconds());
         track.setIsrc(dto.getIsrc());
-        track.setAlbum(albumsMapper.toEntity(dto.getAlbum()));
         return track;
     }
 
@@ -44,7 +39,7 @@ public class TracksMapper {
                 track.getIsExplicit(),
                 track.getPlaybackSeconds(),
                 track.getIsrc(),
-                albumsMapper.toDto(track.getAlbum())
+                track.getAlbum().getId()
         );
     }
 }
