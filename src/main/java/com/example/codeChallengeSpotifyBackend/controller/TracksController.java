@@ -7,8 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/codechallenge")
 public class TracksController {

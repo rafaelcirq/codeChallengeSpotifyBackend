@@ -19,7 +19,8 @@ public class TracksMapper {
                 trackJson.getJSONArray("artists").getJSONObject(0).getString("name"),
                 trackJson.getBoolean("explicit"), trackJson.getInt("duration_ms") / 1000,
                 trackJson.getJSONObject("external_ids").getString("isrc"),
-                trackJson.getJSONObject("album").getString("id"));
+                trackJson.getJSONObject("album").getString("id"),
+                trackJson.getJSONObject("album").getString("name"));
     }
 
     public Tracks toEntity(TracksDTO dto) {
@@ -39,7 +40,8 @@ public class TracksMapper {
                 track.getIsExplicit(),
                 track.getPlaybackSeconds(),
                 track.getIsrc(),
-                track.getAlbum().getId()
+                track.getAlbum().getId(),
+                track.getAlbum().getName()
         );
     }
 }

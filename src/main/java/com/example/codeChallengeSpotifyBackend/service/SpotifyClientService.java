@@ -31,7 +31,7 @@ public class SpotifyClientService {
 
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
-            con.setRequestProperty("Authorization", "Bearer " + token);
+            con.setRequestProperty("Authorization", token);
             con.setConnectTimeout(5000);
             con.setReadTimeout(5000);
 
