@@ -5,6 +5,7 @@ import com.example.codeChallengeSpotifyBackend.exception.albums.AlbumNotFoundExc
 import com.example.codeChallengeSpotifyBackend.exception.albums.ImageNotSavedException;
 import com.example.codeChallengeSpotifyBackend.exception.spotify.SpotifyInvalidTokenException;
 import com.example.codeChallengeSpotifyBackend.exception.tracks.ExistingIsrcException;
+import com.example.codeChallengeSpotifyBackend.exception.tracks.InvalidIsrcException;
 import com.example.codeChallengeSpotifyBackend.exception.tracks.IsrcNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IsrcNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleIsrcNotFoundException(
             IsrcNotFoundException e
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(e.getMessage(), 404, Instant.now()));
+    }
+
+    @ExceptionHandler(InvalidIsrcException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidIsrcException(
+            InvalidIsrcException e
     ) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
