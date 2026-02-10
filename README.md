@@ -56,6 +56,8 @@ Media files for album covers are stored under media/covers (Spring creates this 
 ## clone the repository
 ``` bash
 git clone https://github.com/rafaelcirq/codeChallengeSpotifyBackend.git
+
+cd .\codeChallengeSpotifyBackend\
 ```
 ## before running the application
 Make sure the database exists with proper settings and the user has privileges to create tables
